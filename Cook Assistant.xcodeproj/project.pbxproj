@@ -11,6 +11,11 @@
 		27E9BABF292E9D3000917DEF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E9BABE292E9D3000917DEF /* ContentView.swift */; };
 		27E9BAC1292E9D3300917DEF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 27E9BAC0292E9D3300917DEF /* Assets.xcassets */; };
 		27E9BAC4292E9D3300917DEF /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 27E9BAC3292E9D3300917DEF /* Preview Assets.xcassets */; };
+		27E9BACB292E9E3900917DEF /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E9BACA292E9E3900917DEF /* LoginView.swift */; };
+		27E9BAD0292EAA2B00917DEF /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 27E9BACF292EAA2B00917DEF /* FirebaseAuth */; };
+		27E9BAD2292EAA2B00917DEF /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = 27E9BAD1292EAA2B00917DEF /* FirebaseFirestore */; };
+		27E9BAD4292EAA9200917DEF /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 27E9BAD3292EAA9100917DEF /* GoogleService-Info.plist */; };
+		27E9BAD6292EB9CC00917DEF /* SignupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E9BAD5292EB9CC00917DEF /* SignupView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,6 +24,9 @@
 		27E9BABE292E9D3000917DEF /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		27E9BAC0292E9D3300917DEF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		27E9BAC3292E9D3300917DEF /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		27E9BACA292E9E3900917DEF /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		27E9BAD3292EAA9100917DEF /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
+		27E9BAD5292EB9CC00917DEF /* SignupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -26,6 +34,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				27E9BAD0292EAA2B00917DEF /* FirebaseAuth in Frameworks */,
+				27E9BAD2292EAA2B00917DEF /* FirebaseFirestore in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -53,6 +63,9 @@
 			children = (
 				27E9BABC292E9D3000917DEF /* Cook_AssistantApp.swift */,
 				27E9BABE292E9D3000917DEF /* ContentView.swift */,
+				27E9BACA292E9E3900917DEF /* LoginView.swift */,
+				27E9BAD5292EB9CC00917DEF /* SignupView.swift */,
+				27E9BAD3292EAA9100917DEF /* GoogleService-Info.plist */,
 				27E9BAC0292E9D3300917DEF /* Assets.xcassets */,
 				27E9BAC2292E9D3300917DEF /* Preview Content */,
 			);
@@ -83,6 +96,10 @@
 			dependencies = (
 			);
 			name = "Cook Assistant";
+			packageProductDependencies = (
+				27E9BACF292EAA2B00917DEF /* FirebaseAuth */,
+				27E9BAD1292EAA2B00917DEF /* FirebaseFirestore */,
+			);
 			productName = "Cook Assistant";
 			productReference = 27E9BAB9292E9D3000917DEF /* Cook Assistant.app */;
 			productType = "com.apple.product-type.application";
@@ -111,6 +128,9 @@
 				Base,
 			);
 			mainGroup = 27E9BAB0292E9D3000917DEF;
+			packageReferences = (
+				27E9BACE292EAA2B00917DEF /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			productRefGroup = 27E9BABA292E9D3000917DEF /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -127,6 +147,7 @@
 			files = (
 				27E9BAC4292E9D3300917DEF /* Preview Assets.xcassets in Resources */,
 				27E9BAC1292E9D3300917DEF /* Assets.xcassets in Resources */,
+				27E9BAD4292EAA9200917DEF /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -137,6 +158,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				27E9BAD6292EB9CC00917DEF /* SignupView.swift in Sources */,
+				27E9BACB292E9E3900917DEF /* LoginView.swift in Sources */,
 				27E9BABF292E9D3000917DEF /* ContentView.swift in Sources */,
 				27E9BABD292E9D3000917DEF /* Cook_AssistantApp.swift in Sources */,
 			);
@@ -337,6 +360,30 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		27E9BACE292EAA2B00917DEF /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 9.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		27E9BACF292EAA2B00917DEF /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 27E9BACE292EAA2B00917DEF /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		27E9BAD1292EAA2B00917DEF /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 27E9BACE292EAA2B00917DEF /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 27E9BAB1292E9D3000917DEF /* Project object */;
 }
