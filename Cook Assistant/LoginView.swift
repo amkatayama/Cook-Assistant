@@ -11,22 +11,26 @@ import FirebaseAuth
 
 struct LoginView: View {
     
-    @State var usr_eml = ""
-    @State var usr_pwd = ""
-    @State var authenticationSucceed: Bool = false
+    @State var email = ""
+    @State var password = ""
+    @State var authenticationSucceed: Int = 0  // neither true or false
 //    @State var isNavigationBarHidden: Bool = true
 //    @State var loginButtonTapped: Bool = false
 
     
-    func verifyLogin(email: String, password: String) {
+    func verifyLogin(em: String, pwd: String) {
+        // if both fields are empty
+        if self.email == "" && self.password == "" {
+            self.authenticationSucceed = 2
+        }
         // Checking the firebase if the entered login information matches the registered
         Auth.auth().signIn(withEmail: email, password: password) {(result, error) in
 
             // no error detected on firebase side
             if error == nil {
-                self.authenticationSucceed = true
+                self.authenticationSucceed = 1  // true
             } else {
-                self.authenticationSucceed = false
+                self.authenticationSucceed = 2  // false
             }
         }
     }
@@ -44,8 +48,9 @@ struct LoginView: View {
                 HStack {
                     Image(systemName: "envelope")
                         .foregroundColor(.gray)
-                    TextField("Email address", text: $usr_eml)
+                    TextField("Email address", text: $email)
                 }
+                .frame(width: UIScreen.main.bounds.width * 0.8)
                 .padding(.all, 20)
                 .background(Color.white)
                 .cornerRadius(8)
@@ -54,24 +59,18 @@ struct LoginView: View {
                 HStack {
                     Image(systemName: "lock")
                         .foregroundColor(.gray)
-                    SecureField("Password", text: $usr_pwd)
+                    SecureField("Password", text: $password)
                 }
+                .frame(width: UIScreen.main.bounds.width * 0.8)
                 .padding(.all, 20)
                 .background(Color.white)
                 .cornerRadius(8)
                 .padding(.horizontal, 20)
                 
-                HStack {
-                    Text("Forgot your password?")
-                    NavigationLink(destination: ContentView()) {
-                        Text(" Click Here")
-                    }
-                }
-                
                 Spacer()
                 
                 // only navigates to ContentView if both email and password are entered correctly
-                NavigationLink(destination: ContentView(), isActive: .constant(self.authenticationSucceed == true)) {
+                NavigationLink(destination: ContentView(), isActive: .constant(self.authenticationSucceed == 1)) {
                     Text("Login")
                         .foregroundColor(.white)
                         .font(.system(size: 24, weight: .medium))
@@ -80,44 +79,51 @@ struct LoginView: View {
                 .background(Color.blue.opacity(0.8))
                 .cornerRadius(8)
                 .onTapGesture {   // check login info once login button is tapped
-                    verifyLogin(email: usr_eml, password: usr_pwd)
-                    if self.authenticationSucceed == false {
-                        Text("Wrong email address or password. \n Please try again.")
-                            .multilineTextAlignment(.center)
-                            .font(.system(size: 20, weight: .semibold))
-                            .background(Color.red.opacity(0.8))
-                            .cornerRadius(8)
-                            .foregroundColor(.white)
-                            .padding(.all, 30)
-
-                        // reset textfield to null
-                        self.usr_eml = ""
-                        self.usr_pwd = ""
-                    }
+                    verifyLogin(em: self.email, pwd: self.password)
                 }
                 
-                // Text inidicating that the create account button is only for first time users
-                Text("For first time users")
-                    .padding(.top, 130)
-                    .font(.system(size: 20, weight: .medium))
-                    .foregroundColor(.black)
-                
-                // Create account button
-                NavigationLink(destination: SignupView()) {
-                    Text("Create Account")
-                        .frame(maxWidth: .infinity)
-                        .foregroundColor(.white)
-                        .font(.system(size: 24, weight: .semibold))
-                        .padding(.vertical, 10)
-                        .background(Color.yellow.opacity(0.8))
+                if self.authenticationSucceed == 2 {
+                    Text("Wrong email address or password. \n Please try again.")
+                        .multilineTextAlignment(.center)
+                        .font(.system(size: 20, weight: .semibold))
+                        .background(Color.red.opacity(0.8))
                         .cornerRadius(8)
-                        .padding(.horizontal, 20)
+                        .foregroundColor(.white)
+                        .padding(.top, 30)
+                    
+                    HStack {
+                        Text("Forgot your password?")
+                        NavigationLink(destination: ContentView()) {
+                            Text(" Click Here")
+                        }
+                    }
+                    
+                    // reset textfield to null
+//                    self.email = ""
+//                    self.password = ""
                 }
-                
-                Spacer()
-
+//
+                    // Text inidicating that the create account button is only for first time users
+                    Text("For first time users")
+                        .padding(.top, 130)
+                        .font(.system(size: 20, weight: .medium))
+                        .foregroundColor(.black)
+                    
+                    // Create account button
+                    NavigationLink(destination: SignupView()) {
+                        Text("Create Account")
+                            .frame(maxWidth: .infinity)
+                            .foregroundColor(.white)
+                            .font(.system(size: 24, weight: .semibold))
+                            .padding(.vertical, 10)
+                            .background(Color.yellow.opacity(0.8))
+                            .cornerRadius(8)
+                            .padding(.horizontal, 20)
+                    }
+                    
+                    Spacer()
+                    
             }
-            
         }
     }
     
