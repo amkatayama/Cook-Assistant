@@ -10,14 +10,18 @@ import FirebaseAuth
 import Firebase
 
 struct SignupView: View {
+    
     // creating necessary variables
     @State var username = ""
     @State var email = ""
+    @State var phone = ""
     @State var password = ""
     @State var confirmPassword = ""
     @State var errorMessage = ""
     @State var signuppage = false
     @State var authenticationSucceed: Bool = false
+    @State var goBackToLogin: Bool = false
+    @State var enableSMS: Bool = false
     @State var navigate: Bool = false
     
     // check if all the fields contain the correct information
@@ -27,7 +31,7 @@ struct SignupView: View {
         // check if all the fields are filled
         if self.username.count == 0 || self.email.count == 0 || self.password.count == 0 || self.confirmPassword.count == 0 {
             
-            errorMessage = "Please fill in all fields"
+            self.errorMessage = "Please fill in all fields"
             return "error"
 
         }
@@ -35,14 +39,14 @@ struct SignupView: View {
         if isPasswordSecure(self.password) == false {
             
             // show error message
-            errorMessage = "Please make sure you password includes at least one uppercase, one lowercase, one numeric digit and is more than 8 characters."
+            self.errorMessage = "Please make sure you password includes at least one uppercase, one lowercase, one numeric digit and is more than 8 characters."
             return "error"
         }
         
         // check if the password and confirmed password match
         if self.confirmPassword != self.password {
             
-            errorMessage = "Please make sure that your passwords match."
+            self.errorMessage = "Please make sure that your passwords match."
             return "error"
             
         }
@@ -63,7 +67,7 @@ struct SignupView: View {
         return passwordFormat.evaluate(with: password)
     }
     
-    func checkLoginInfo() {
+    func checkRegisterInfo() {
         // validate the fields
         let error = validateFields()
         
@@ -79,51 +83,28 @@ struct SignupView: View {
             // show message to show that sign up was successful
             self.authenticationSucceed = true
             
-            // store the most recent input from the user
-            let usr = self.username
-            let eml = self.email
-            let pwd = self.password
-            
             // create the user accordingly to the registerd information
-            Auth.auth().createUser(withEmail: eml, password: pwd) { (result, err) in
+            Auth.auth().createUser(withEmail: self.email, password: self.password) { (result, err) in
                 // Check for errors
                 if err != nil {
                     // error found in creating user
                     print("Error creating user")
-                } else {
-                    
-                    // user was created successfully
-                    // storing database into a constant
-                    let db = Firestore.firestore()
-                    
-                    // find collection called "users" and create a new docuemnt with their user id
-                    db.collection("users").addDocument(data: ["username":usr, "uid":result!.user.uid]) { (error) in
-                        
-                        // check for errors
-                        if error != nil {
-                            print("Error saving user data")
-                        }
-                    }
-                    
-                    // empty the textfields
-                    self.username = ""
-                    self.email = ""
-                    self.password = ""
-                    self.confirmPassword = ""
-                    
                 }
             }
         }
     }
     
+    @Environment(\.colorScheme) var colorScheme  // handling light and dark schemes
+        
     var body: some View {
         NavigationView {
             VStack (spacing: 30) {
                 Spacer()
                 
                 // Creating a title for the page
+//                Text(colorScheme == .dark ? "Create Account":"Create Account")
                 Text("Create Account")
-                    .frame(width: UIScreen.main.bounds.width * 0.9)
+                    .frame(width: UIScreen.main.bounds.width * 0.9)  // scaled size for different screen size
                     .font(.system(size: 40, weight: .semibold))
                     .foregroundColor(.yellow)
                     .background(Color.gray.opacity(0.9))
@@ -134,52 +115,73 @@ struct SignupView: View {
                 HStack {
                     Image(systemName: "person")
                         .foregroundColor(.gray)
-                    TextField("Username", text: $username)
+                    TextField("Username", text: self.$username)
                 }
                 .frame(width: UIScreen.main.bounds.width * 0.8)
                 .padding(.all, 10)
                 .background(Color.white)
                 .cornerRadius(8)
+                .border(.yellow)
                 .padding(.horizontal, 20)
+                .autocapitalization(.none)  // diasble autocapitalization
                 
                 // Text field for email address
                 HStack {
                     Image(systemName: "envelope")
                         .foregroundColor(.gray)
-                    TextField("Email address", text: $email)
+                    TextField("Email address", text: self.$email)
                 }
                 .frame(width: UIScreen.main.bounds.width * 0.8)
                 .padding(.all, 10)
                 .background(Color.white)
                 .cornerRadius(8)
+                .border(.yellow)
                 .padding(.horizontal, 20)
+                .autocapitalization(.none)
+                
+                HStack {
+                    Image(systemName: "phone")
+                        .foregroundColor(.gray)
+                    TextField("Phone Number (Optional)", text: self.$phone)
+                }
+                .frame(width: UIScreen.main.bounds.width * 0.8)
+                .padding(.all, 10)
+                .background(Color.white)
+                .cornerRadius(8)
+                .border(.yellow)
+                .padding(.horizontal, 20)
+                .autocapitalization(.none)
                 
                 // Text field for email address
                 HStack {
                     Image(systemName: "lock")
                         .foregroundColor(.gray)
-                    TextField("Password", text: $password)
+                    SecureField("Password", text: self.$password)
                 }
                 .frame(width: UIScreen.main.bounds.width * 0.8)
                 .padding(.all, 10)
                 .background(Color.white)
                 .cornerRadius(8)
+                .border(.yellow)
                 .padding(.horizontal, 20)
+                .autocapitalization(.none)
                 
                 // Text field for the user to re-enter the password for confirmation
                 HStack {
                     Image(systemName: "lock")
                         .foregroundColor(.gray)
-                    SecureField("Re-enter your password", text: $confirmPassword)
+                    SecureField("Re-enter your password", text: self.$confirmPassword)
                 }
                 .frame(width: UIScreen.main.bounds.width * 0.8)
                 .padding(.all, 10)
                 .background(Color.white)
                 .cornerRadius(8)
+                .border(.yellow)
                 .padding(.horizontal, 20)
+                .autocapitalization(.none)
                 
                 // create navigation link which only works when authenticationSucceed = true
-                NavigationLink(destination: ContentView(), isActive: .constant(self.authenticationSucceed == true)) {
+                NavigationLink(destination: ContentView(), isActive: .constant(self.goBackToLogin == true)) {
                     Text("Create Account")
                         .foregroundColor(.white)
                         .font(.system(size: 24, weight: .medium))
@@ -188,20 +190,35 @@ struct SignupView: View {
                 .navigationBarTitle("")
                 .navigationBarHidden(true)
                 .padding(.all, 10)
-                .background(Color.blue.opacity(0.8))
+                .background(Color.yellow)
                 .cornerRadius(8)
                 .padding(.all, 20)
+                .autocapitalization(.none)
                 // call function at the same time the button is tapped
                 .simultaneousGesture(TapGesture().onEnded{
-                    checkLoginInfo()
-                    // if all information is valid
+                    checkRegisterInfo()
                     
+                })
+                // permission to send confirmaiton notification with SMS
+                .alert("Allow SMS notification", isPresented: self.$authenticationSucceed, actions: {
+                    Button("Yes", role: .cancel, action: {
+                        self.goBackToLogin = true
+                        self.enableSMS = true
+                    })
+         
+                    Button("Cancel", role: .cancel, action: {
+                        self.goBackToLogin = true
+                    })
+                }, message: {
+                    Text("Enter your email address to receive password reset link.")
                 })
                 
                 if self.authenticationSucceed == false{
                     // showing different error messages for different errors
-                    Text(errorMessage)
-                        .background(Color.red.opacity(0.6))
+                    Text(self.errorMessage)
+                        .multilineTextAlignment(.center)
+                        .font(.system(size: 20, weight: .semibold))
+                        .background(Color.red.opacity(0.8))
                         .cornerRadius(8)
                         .foregroundColor(.white)
                         .padding(.top, 30)
@@ -218,6 +235,7 @@ struct SignupView: View {
 struct SignupView_Previews: PreviewProvider {
     static var previews: some View {
         SignupView()
+        LoginView()
     }
 }
 
