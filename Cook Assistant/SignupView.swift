@@ -11,18 +11,22 @@ import Firebase
 
 struct SignupView: View {
     
+    // if email address already exists user cannot create password
+    
     // creating necessary variables
     @State var username = ""
     @State var email = ""
+    @State var areacode = ""
     @State var phone = ""
     @State var password = ""
     @State var confirmPassword = ""
     @State var errorMessage = ""
     @State var signuppage = false
     @State var authenticationSucceed: Bool = false
-    @State var goBackToLogin: Bool = false
     @State var enableSMS: Bool = false
     @State var navigate: Bool = false
+    
+    @State var msg = ""
     
     // check if all the fields contain the correct information
     // show different errors messages for different errors
@@ -58,7 +62,6 @@ struct SignupView: View {
     
     // checking if the password is secure enough
     func isPasswordSecure(_ password: String) -> Bool {
-        
         // setting a format for the password
         // password should have: at least one uppercase and a lowercase, at leat one number, and 8 characters long
         let passwordFormat = NSPredicate(format: "SELF MATCHES %@", "(?=.*[A-Z])(?=.*[0-9])(?=.*[a-z]).{8,}")
@@ -85,11 +88,21 @@ struct SignupView: View {
             
             // create the user accordingly to the registerd information
             Auth.auth().createUser(withEmail: self.email, password: self.password) { (result, err) in
-                // Check for errors
+                // if an email already exists return error
                 if err != nil {
                     // error found in creating user
-                    print("Error creating user")
+                    self.errorMessage = "The email address is currently in use. Please enter a new email address or try logging in."
                 }
+            }
+        }
+    }
+    
+    func verifyPhone() {
+        PhoneAuthProvider.provider().verifyPhoneNumber("+"+self.areacode+self.phone, uiDelegate: nil) {(ID, err) in
+            
+            if err != nil {
+                self.msg = (err?.localizedDescription)!
+                return
             }
         }
     }
@@ -124,6 +137,7 @@ struct SignupView: View {
                 .border(.yellow)
                 .padding(.horizontal, 20)
                 .autocapitalization(.none)  // diasble autocapitalization
+                .disableAutocorrection(true)  // disable autoconversion
                 
                 // Text field for email address
                 HStack {
@@ -138,11 +152,18 @@ struct SignupView: View {
                 .border(.yellow)
                 .padding(.horizontal, 20)
                 .autocapitalization(.none)
+                .disableAutocorrection(true)
                 
                 HStack {
                     Image(systemName: "phone")
                         .foregroundColor(.gray)
+                    
+                    TextField("+1", text: self.$areacode)
+                        .keyboardType(.numberPad)  // number pad by default
+                        .frame(width: 30)
+                    
                     TextField("Phone Number (Optional)", text: self.$phone)
+                        .keyboardType(.numberPad)
                 }
                 .frame(width: UIScreen.main.bounds.width * 0.8)
                 .padding(.all, 10)
@@ -151,12 +172,14 @@ struct SignupView: View {
                 .border(.yellow)
                 .padding(.horizontal, 20)
                 .autocapitalization(.none)
+                .disableAutocorrection(true)
                 
                 // Text field for email address
                 HStack {
                     Image(systemName: "lock")
                         .foregroundColor(.gray)
                     SecureField("Password", text: self.$password)
+                    
                 }
                 .frame(width: UIScreen.main.bounds.width * 0.8)
                 .padding(.all, 10)
@@ -165,6 +188,7 @@ struct SignupView: View {
                 .border(.yellow)
                 .padding(.horizontal, 20)
                 .autocapitalization(.none)
+                .disableAutocorrection(true)
                 
                 // Text field for the user to re-enter the password for confirmation
                 HStack {
@@ -179,9 +203,10 @@ struct SignupView: View {
                 .border(.yellow)
                 .padding(.horizontal, 20)
                 .autocapitalization(.none)
+                .disableAutocorrection(true)
                 
                 // create navigation link which only works when authenticationSucceed = true
-                NavigationLink(destination: ContentView(), isActive: .constant(self.goBackToLogin == true)) {
+                NavigationLink(destination: LoginView(), isActive: .constant(self.enableSMS == true)) {
                     Text("Create Account")
                         .foregroundColor(.white)
                         .font(.system(size: 24, weight: .medium))
@@ -194,24 +219,25 @@ struct SignupView: View {
                 .cornerRadius(8)
                 .padding(.all, 20)
                 .autocapitalization(.none)
+                .disableAutocorrection(true)
                 // call function at the same time the button is tapped
                 .simultaneousGesture(TapGesture().onEnded{
                     checkRegisterInfo()
-                    
+                    if enableSMS == true {
+                       verifyPhone()
+                    }
                 })
                 // permission to send confirmaiton notification with SMS
-                .alert("Allow SMS notification", isPresented: self.$authenticationSucceed, actions: {
-                    Button("Yes", role: .cancel, action: {
-                        self.goBackToLogin = true
-                        self.enableSMS = true
-                    })
-         
-                    Button("Cancel", role: .cancel, action: {
-                        self.goBackToLogin = true
-                    })
-                }, message: {
-                    Text("Enter your email address to receive password reset link.")
-                })
+                .alert(isPresented: self.$authenticationSucceed) {
+                    Alert(
+                        title: Text("Allow SMS notification"),
+                        message: Text("Enter your email address to receive password reset link."),
+                        primaryButton: .default(Text("Yes")) {
+                            self.enableSMS = true
+                        },
+                        secondaryButton: .cancel()
+                    )}
+                
                 
                 if self.authenticationSucceed == false{
                     // showing different error messages for different errors
@@ -232,10 +258,12 @@ struct SignupView: View {
     
 }
 
+
+
 struct SignupView_Previews: PreviewProvider {
     static var previews: some View {
-        SignupView()
         LoginView()
+        SignupView()
     }
 }
 

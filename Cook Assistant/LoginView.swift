@@ -17,6 +17,9 @@ struct LoginView: View {
     @State var authenticationSucceed: Int = 0  // neither true or false
     @State var pwdReset: Bool = false
     @State var resetError: Bool = false
+    
+    // enables to remove unnecessary navigation links 
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
 
     
     func verifyLogin(em: String, pwd: String) {
@@ -152,6 +155,10 @@ struct LoginView: View {
                     }
                     
             }
+            // removing "back" navigations on LoginView
+            .navigationBarTitle("")
+            .navigationBarBackButtonHidden(true)
+            .navigationBarHidden(true)
         }
     }
     
