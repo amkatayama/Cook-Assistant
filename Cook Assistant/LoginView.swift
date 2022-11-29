@@ -52,113 +52,125 @@ struct LoginView: View {
     }
     
     var body: some View {
+        
         NavigationView {
-            VStack(spacing: 15) {
+            ZStack {
                 
-                Spacer()
+//                Image("Cook-Assistant-BGI")
+//                    .resizable()
+//                    .aspectRatio(contentMode: .fill)
+//                    .edgesIgnoringSafeArea(.all)
+//                    .blur(radius: 0)  // animate it
+//                    .saturation(0.4)
                 
-                Text("Welcome")
-                    .font(.system(size: 64, weight: .semibold))
+                VStack(spacing: 15) {
+                    
+                    Spacer()
+                    
+                    Text("Welcome")
+                        .font(.system(size: 64, weight: .bold))
+                        .foregroundColor(.yellow)
+                        .padding(.bottom, 20)
+                    
+                    HStack {
+                        Image(systemName: "envelope")
+                            .foregroundColor(.gray)
+                        TextField("Email address", text: self.$email)
+                    }
+                    .frame(width: UIScreen.main.bounds.width * 0.8)
+                    .padding(.all, 20)
+                    .background(Color.white)
+                    .cornerRadius(8)
+                    .border(Color.yellow)
+                    .autocapitalization(.none)  // disable autocapitalization
+                    
+                    HStack {
+                        Image(systemName: "lock")
+                            .foregroundColor(.gray)
+                        SecureField("Password", text: self.$password)
+                    }
+                    .frame(width: UIScreen.main.bounds.width * 0.8)
+                    .padding(.all, 20)
+                    .background(Color.white)
+                    .cornerRadius(8)
+                    .border(Color.yellow)
+                    .autocapitalization(.none)
+                    
+                    Button("Forgot password") {
+                        self.pwdReset = true
+                    }
                     .foregroundColor(.yellow)
-                
-                HStack {
-                    Image(systemName: "envelope")
-                        .foregroundColor(.gray)
-                    TextField("Email address", text: self.$email)
-                }
-                .frame(width: UIScreen.main.bounds.width * 0.8)
-                .padding(.all, 20)
-                .background(Color.white)
-                .cornerRadius(8)
-                .border(Color.yellow)
-                .autocapitalization(.none)  // disable autocapitalization
-                
-                HStack {
-                    Image(systemName: "lock")
-                        .foregroundColor(.gray)
-                    SecureField("Password", text: self.$password)
-                }
-                .frame(width: UIScreen.main.bounds.width * 0.8)
-                .padding(.all, 20)
-                .background(Color.white)
-                .cornerRadius(8)
-                .border(Color.yellow)
-                .autocapitalization(.none)
-                
-                Button("Forgot password") {
-                    self.pwdReset = true
-                }
-                .padding(.bottom, 30)
-                .foregroundColor(.yellow)
-                .font(.system(size: 20, weight: .semibold))
-                .frame(width: UIScreen.main.bounds.width * 0.8, alignment: .trailing)
+                    .padding(.bottom, 30)
+                    .font(.system(size: 20, weight: .semibold))
+                    .frame(width: UIScreen.main.bounds.width * 0.9, alignment: .trailing)
 
-                .alert("Password Reset", isPresented: self.$pwdReset, actions: {
-                    TextField("Email Address", text: self.$emailForReset)
-                    
-                    Button("Send Link!", action: {
-                        passwordReset()
-                        self.emailForReset = ""  // refresh text field
+                    .alert("Password Reset", isPresented: self.$pwdReset, actions: {
+                        TextField("Email Address", text: self.$emailForReset)
+                        
+                        Button("Send Link!", action: {
+                            passwordReset()
+                            self.emailForReset = ""  // refresh text field
+                        })
+             
+                        Button("Cancel", role: .cancel, action: {})
+                    }, message: {
+                        Text("Enter your email address to receive password reset link.")
                     })
-         
-                    Button("Cancel", role: .cancel, action: {})
-                }, message: {
-                    Text("Enter your email address to receive password reset link.")
-                })
-            
-                // only navigates to ContentView if both email and password are entered correctly
-                NavigationLink(destination:  ContentView(), isActive: .constant(self.authenticationSucceed == 1)) {
-                    Text("Login")
-                        .frame(maxWidth: .infinity)
-                        .foregroundColor(.white)
-                        .font(.system(size: 24, weight: .semibold))
-                        .padding(.vertical, 10)
-                        .background(Color.yellow.opacity(0.8))
-                        .cornerRadius(8)
-                        .padding(.horizontal, 20)
-                        .onTapGesture {   // check login info once login button is tapped
-                            verifyLogin(em: self.email, pwd: self.password)
-                        }
-                }
                 
-                
-                if self.authenticationSucceed == 2 {
-                    Text("Wrong email address or password. \n Please try again.")
-                        .multilineTextAlignment(.center)
-                        .font(.system(size: 20, weight: .semibold))
-                        .background(Color.red.opacity(0.8))
-                        .cornerRadius(8)
-                        .foregroundColor(.white)
-                        .padding(.top, 30)
-                    
-                    // reset textfield to null
-//                    self.email = ""
-//                    self.password = ""
-                }
-//
-                // Text inidicating that the create account button is only for first time users
-                Text("For first time users")
-                    .padding(.top, 130)
-                    .font(.system(size: 20, weight: .medium))
-                    .foregroundColor(.black)
-                    
-                // Create account button
-                NavigationLink(destination: SignupView()) {
-                    Text("Create Account")
-                        .frame(width: UIScreen.main.bounds.width * 0.8)
-                        .foregroundColor(.white)
-                        .font(.system(size: 24, weight: .semibold))
-                        .padding(.vertical, 10)
-                        .background(Color.yellow.opacity(0.8))
-                        .cornerRadius(8)
-                        .padding(.horizontal, 20)
+                    // only navigates to ContentView if both email and password are entered correctly
+                    NavigationLink(destination:  ContentView(), isActive: .constant(self.authenticationSucceed == 1)) {
+                        Text("Login")
+                            .frame(width: UIScreen.main.bounds.width * 0.9)
+                            .foregroundColor(.white)
+                            .font(.system(size: 24, weight: .semibold))
+                            .padding(.vertical, 10)
+                            .background(Color.yellow.opacity(0.8))
+                            .cornerRadius(8)
+                            .padding(.horizontal, 20)
+                            .onTapGesture {   // check login info once login button is tapped
+                                verifyLogin(em: self.email, pwd: self.password)
+                            }
                     }
                     
+                    
+                    if self.authenticationSucceed == 2 {
+                        Text("Wrong email address or password. \n Please try again.")
+                            .multilineTextAlignment(.center)
+                            .font(.system(size: 20, weight: .semibold))
+                            .background(Color.red.opacity(0.8))
+                            .cornerRadius(8)
+                            .foregroundColor(.white)
+                            .padding(.top, 30)
+                        
+                        // reset textfield to null
+    //                    self.email = ""
+    //                    self.password = ""
+                    }
+    //
+                    // Text inidicating that the create account button is only for first time users
+                    Text("For first time users")
+                        .padding(.top, 130)
+                        .font(.system(size: 20, weight: .medium))
+                        .foregroundColor(.black)
+                        
+                    // Create account button
+                    NavigationLink(destination: SignupView()) {
+                        Text("Create Account")
+                            .frame(width: UIScreen.main.bounds.width * 0.8)
+                            .foregroundColor(.white)
+                            .font(.system(size: 24, weight: .semibold))
+                            .padding(.vertical, 10)
+                            .background(Color.yellow.opacity(0.8))
+                            .cornerRadius(8)
+                            .padding(.horizontal, 20)
+                        }
+                        
+                }
+                // removing "back" navigations on LoginView
+                .navigationBarTitle("")
+                .navigationBarBackButtonHidden(true)
+                .navigationBarHidden(true)
             }
-            // removing "back" navigations on LoginView
-            .navigationBarTitle("")
-            .navigationBarBackButtonHidden(true)
-            .navigationBarHidden(true)
         }
     }
     

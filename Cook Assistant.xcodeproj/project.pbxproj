@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		27350F342932696100B8E94A /* WecscrapeScript.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27350F332932696100B8E94A /* WecscrapeScript.swift */; };
+		27350F3729326E9500B8E94A /* SwiftSoup in Frameworks */ = {isa = PBXBuildFile; productRef = 27350F3629326E9500B8E94A /* SwiftSoup */; };
 		2797CFD229308CCA0023A4CE /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2797CFD129308CC90023A4CE /* GoogleService-Info.plist */; };
 		27E9BABD292E9D3000917DEF /* Cook_AssistantApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E9BABC292E9D3000917DEF /* Cook_AssistantApp.swift */; };
 		27E9BABF292E9D3000917DEF /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27E9BABE292E9D3000917DEF /* ContentView.swift */; };
@@ -19,6 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		27350F332932696100B8E94A /* WecscrapeScript.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WecscrapeScript.swift; sourceTree = "<group>"; };
 		2797CFD129308CC90023A4CE /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		27E9BAB9292E9D3000917DEF /* Cook Assistant.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Cook Assistant.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		27E9BABC292E9D3000917DEF /* Cook_AssistantApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Cook_AssistantApp.swift; sourceTree = "<group>"; };
@@ -36,6 +39,7 @@
 			files = (
 				27E9BAD0292EAA2B00917DEF /* FirebaseAuth in Frameworks */,
 				27E9BAD2292EAA2B00917DEF /* FirebaseFirestore in Frameworks */,
+				27350F3729326E9500B8E94A /* SwiftSoup in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -65,6 +69,7 @@
 				27E9BABE292E9D3000917DEF /* ContentView.swift */,
 				27E9BACA292E9E3900917DEF /* LoginView.swift */,
 				27E9BAD5292EB9CC00917DEF /* SignupView.swift */,
+				27350F332932696100B8E94A /* WecscrapeScript.swift */,
 				2797CFD129308CC90023A4CE /* GoogleService-Info.plist */,
 				27E9BAC0292E9D3300917DEF /* Assets.xcassets */,
 				27E9BAC2292E9D3300917DEF /* Preview Content */,
@@ -99,6 +104,7 @@
 			packageProductDependencies = (
 				27E9BACF292EAA2B00917DEF /* FirebaseAuth */,
 				27E9BAD1292EAA2B00917DEF /* FirebaseFirestore */,
+				27350F3629326E9500B8E94A /* SwiftSoup */,
 			);
 			productName = "Cook Assistant";
 			productReference = 27E9BAB9292E9D3000917DEF /* Cook Assistant.app */;
@@ -130,6 +136,7 @@
 			mainGroup = 27E9BAB0292E9D3000917DEF;
 			packageReferences = (
 				27E9BACE292EAA2B00917DEF /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				27350F3529326E9500B8E94A /* XCRemoteSwiftPackageReference "SwiftSoup" */,
 			);
 			productRefGroup = 27E9BABA292E9D3000917DEF /* Products */;
 			projectDirPath = "";
@@ -158,6 +165,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				27350F342932696100B8E94A /* WecscrapeScript.swift in Sources */,
 				27E9BAD6292EB9CC00917DEF /* SignupView.swift in Sources */,
 				27E9BACB292E9E3900917DEF /* LoginView.swift in Sources */,
 				27E9BABF292E9D3000917DEF /* ContentView.swift in Sources */,
@@ -364,6 +372,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		27350F3529326E9500B8E94A /* XCRemoteSwiftPackageReference "SwiftSoup" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/scinfu/SwiftSoup.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.0;
+			};
+		};
 		27E9BACE292EAA2B00917DEF /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
@@ -375,6 +391,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		27350F3629326E9500B8E94A /* SwiftSoup */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 27350F3529326E9500B8E94A /* XCRemoteSwiftPackageReference "SwiftSoup" */;
+			productName = SwiftSoup;
+		};
 		27E9BACF292EAA2B00917DEF /* FirebaseAuth */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 27E9BACE292EAA2B00917DEF /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;

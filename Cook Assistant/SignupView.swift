@@ -97,15 +97,15 @@ struct SignupView: View {
         }
     }
     
-    func verifyPhone() {
-        PhoneAuthProvider.provider().verifyPhoneNumber("+"+self.areacode+self.phone, uiDelegate: nil) {(ID, err) in
-            
-            if err != nil {
-                self.msg = (err?.localizedDescription)!
-                return
-            }
-        }
-    }
+//    func verifyPhone() {
+//        PhoneAuthProvider.provider().verifyPhoneNumber("+"+self.areacode+self.phone, uiDelegate: nil) {(ID, err) in
+//
+//            if err != nil {
+//                self.msg = (err?.localizedDescription)!
+//                return
+//            }
+//        }
+//    }
     
     @Environment(\.colorScheme) var colorScheme  // handling light and dark schemes
         
@@ -120,7 +120,6 @@ struct SignupView: View {
                     .frame(width: UIScreen.main.bounds.width * 0.9)  // scaled size for different screen size
                     .font(.system(size: 40, weight: .semibold))
                     .foregroundColor(.yellow)
-                    .background(Color.gray.opacity(0.9))
                     .cornerRadius(8)
                     .padding(.bottom, 20)
                 
@@ -223,9 +222,9 @@ struct SignupView: View {
                 // call function at the same time the button is tapped
                 .simultaneousGesture(TapGesture().onEnded{
                     checkRegisterInfo()
-                    if enableSMS == true {
-                       verifyPhone()
-                    }
+//                    if enableSMS == true {
+//                       verifyPhone()
+//                    }
                 })
                 // permission to send confirmaiton notification with SMS
                 .alert(isPresented: self.$authenticationSucceed) {
