@@ -9,8 +9,16 @@ import SwiftUI
 import Firebase
 import SwiftSoup
 
-struct Webscrape {
+class RecipesList {
+    var recipeArray = [Recipe]()
     
+    init(recipeArray: [Recipe]) {
+        self.recipeArray = recipeArray
+    }
+    
+    func push(name: String, description: String, image: String, ingredient: [String], nutrition: [String]) {
+        self.recipeArray.append(Recipe(name: name, description: description, image: image, ingredient: ingredient, nutrition: nutrition))
+    }
 }
 
 class Recipe {
@@ -44,6 +52,37 @@ class Recipe {
     }
     func getNutrition() -> [String] {
         return self.nutrition
+    }
+    
+}
+
+
+
+// id for name: article-heading_2-0
+func scrapeData(subUrl: String, id: String){
+    // if baseUrl cannot be found or accessed
+    guard let accessSubUrl = URL(string: subUrl) else {
+        print("Invalid URL Error: \(subUrl)")
+        return // break from the function
+    }
+    // retrieve the html code for accessBaseUrl
+    do {
+        let recipeHtml = try String(contentsOf: accessSubUrl, encoding: .ascii)
+        // parsing html and retrieving tags with desired title
+        do {
+            let doc: Document = try SwiftSoup.parse(recipeHtml)
+            // inserting every "a" tag into array sublink
+            let target = try doc.select("#\(id)").first()
+            // if header tag then
+            if target?.tagName() != "h1"{
+                
+            }
+            
+        } catch Exception.Error(type: let type, Message: let message){
+            print("Error: \(type), \(message)")
+        }
+    } catch let error {
+        print(error)
     }
 }
 
